@@ -10,7 +10,6 @@ bool BuildFromFolder( const BString& strRootFolder, Compression::Zip::File& zip,
 
 	BOOTIL_FOREACH( f, files, String::List )
 	{
-
 		if ( strLauncher.empty() && String::EndsWith( *f, ".exe" ) )
 			strLauncher = *f;
 
@@ -87,10 +86,10 @@ int main( int argc, char *argv[] )
 	// Create the BundleHeader
 	//
 	BundlerHeader header;
+		memset( &header, 0, sizeof(header) );
 		memcpy( header.ident, BundlerIdent, sizeof(BundlerIdent) );
 		header.launchersize = Launcher.GetWritten();
 		header.zipsize = ZipBuffer.GetWritten();
-		memset( header.command, 0, sizeof(header.command) );
 		memcpy( header.command, EmbeddedExe.c_str(), EmbeddedExe.length() );
 
 	//
