@@ -23,14 +23,16 @@ configuration "Debug"
 project "Bundler"
 	files { "../src/bundler/**.*" }
 	kind "WindowedApp"
-	links( "bootil_s" )
+	
 
 	configuration "Release"
 		targetname( "bundler" )
+		links( "bootil_s" )
 		
 		
 	configuration "Debug"
 		targetname( "bundler_d" )
+		links( "bootil_sd" )
 
 project "Launcher"
 	files { "../src/launcher/**.*" }
@@ -39,6 +41,8 @@ project "Launcher"
 	
 	configuration "Release"
 		targetname( "launcher" )
+		links( "bootil_s" )
 		
 	configuration "Debug"
 		targetname( "launcher_d" )
+		links( "bootil_sd" )

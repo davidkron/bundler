@@ -3,7 +3,7 @@
 
 using namespace Bootil;
 
-int main()
+int main( int argc, char *argv[] )
 {
 	
 	BString strCurrentDir		= Platform::CurrentDir();
