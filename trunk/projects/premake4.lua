@@ -22,7 +22,7 @@ configuration "Debug"
 
 project "Bundler"
 	files { "../src/bundler/**.*" }
-	kind "WindowedApp"
+	kind "ConsoleApp"
 	
 
 	configuration "Release"

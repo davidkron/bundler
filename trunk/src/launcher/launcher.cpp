@@ -32,25 +32,44 @@ int main( int argc, char *argv[] )
 		Output::Error( "Couldn't launch - invalid ident [%i%i%i%i%i%i], sorry!", header.ident[0], header.ident[1], header.ident[2], header.ident[3], header.ident[4], header.ident[5] );
 	}
 
+	//
+	// Find the zip file in the current program and open it from memory
+	//
 	buffer.SetPos( header.launchersize );
-	Compression::Zip::File	ZipFile( buffer.GetCurrent(), header.zipsize );
+	Compression::Zip::File ZipFile( buffer.GetCurrent(), header.zipsize );
 	if ( !ZipFile.IsOpen() )
 	{
 		Output::Error( "Couldn't launch - embedded zip file is invalid");
 	}
 
+	//
+	// We're done with the buffer, free it
+	//
+	buffer.Clear();
+
+	//
+	// Create a temporary folder to extract the zip to
+	//
 	BString TempDir = Platform::TemporaryDir() + "/" + String::Random( 16, true, true, true ) ;
 	File::CreateFolder( TempDir );
 
+	//
+	// Extract and close the zip (free memory)
+	//
 	ZipFile.ExtractToFolder( TempDir );
+	ZipFile.Close();
 
+	//
+	// Run the process (launcher waits until the program is finished)
+	//
 	{
-		// Launch process..
+		Platform::ChangeDir( String::FileUtil::GetStripFilename( TempDir + "/"  + header.command) );
+		Platform::StartProcess( (TempDir + "/"  + header.command).c_str(), true );
 	}
 
-	File::RemoveFolder( TempDir, true );
-
-	Debug::PopupMessage( ("OK " + TempDir).c_str() );
-	
+	//
+	// Clean up after ourselves
+	//
+	File::RemoveFolder( TempDir, true );	
 	
 }
